@@ -13,6 +13,7 @@ type FileSystem interface {
 type FileSystemWriter interface {
 	FileSystem
 	Create(name string) (FileWriter, error)
+	Remove(path string) error
 	RemoveAll(path string) error
 	MkdirAll(path string, perm os.FileMode) error
 }
