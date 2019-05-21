@@ -1,6 +1,9 @@
 package filework
 
-import "os"
+import (
+	"os"
+	"path"
+)
 
 // FileSystem is the minimum interface required to read from a file system.
 type FileSystem interface {
@@ -16,4 +19,16 @@ type FileSystemWriter interface {
 	Remove(path string) error
 	RemoveAll(path string) error
 	MkdirAll(path string, perm os.FileMode) error
+}
+
+// A Joiner is a file system capable of joining paths.
+type Joiner interface {
+	Join(elem ...string) string
+}
+
+func fsJoin(fs FileSystem, elems ...string) string {
+	if joiner, ok := fs.(Joiner); ok {
+		return joiner.Join(elems...)
+	}
+	return path.Join(elems...)
 }
